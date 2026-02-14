@@ -1,14 +1,4 @@
-# 🟣 C# Online Compiler
 
-ایک مکمل ویب بیسڈ C# کمپائلر جو براؤزر میں ہی C# کوڈ لکھنے، کمپائل کرنے اور چلانے کی سہولت دیتا ہے۔
-
-![C# Compiler](https://img.shields.io/badge/C%23-Online_Compiler-purple?style=for-the-badge&logo=csharp)
-![React](https://img.shields.io/badge/React-18-blue?style=for-the-badge&logo=react)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
-![Tailwind](https://img.shields.io/badge/Tailwind_CSS-3-38bdf8?style=for-the-badge&logo=tailwindcss)
-
----
-bhai is readme ko english mei convert kar 
 
 
 
