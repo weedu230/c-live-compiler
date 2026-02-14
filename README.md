@@ -8,111 +8,146 @@
 ![Tailwind](https://img.shields.io/badge/Tailwind_CSS-3-38bdf8?style=for-the-badge&logo=tailwindcss)
 
 ---
-📋 Project Overview
+bhai is readme ko english mei convert kar 
 
-This is a web-based C# compiler providing a professional IDE-like interface. It includes:
 
-✅ Monaco Editor — VS Code-like code editor (syntax highlighting, autocomplete)
 
-✅ Piston API — secure (sandboxed) code compilation and execution
+# 🟣 C# Online Compiler
 
-✅ Real-time Output — compile errors and runtime output displayed instantly
+ایک مکمل ویب بیسڈ C# کمپائلر جو براؤزر میں ہی C# کوڈ لکھنے، کمپائل کرنے اور چلانے کی سہولت دیتا ہے۔
 
-✅ Dark Theme — professional IDE-like design
+![C# Compiler](https://img.shields.io/badge/C%23-Online_Compiler-purple?style=for-the-badge&logo=csharp)
+![React](https://img.shields.io/badge/React-18-blue?style=for-the-badge&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
+![Tailwind](https://img.shields.io/badge/Tailwind_CSS-3-38bdf8?style=for-the-badge&logo=tailwindcss)
 
-🛠️ Tech Stack
-Technology	Usage
-React 18	Frontend UI framework
-TypeScript	Type safety and better development experience
-Vite	Fast build tool and dev server
-Tailwind CSS	Utility-first CSS framework
-Monaco Editor	VS Code browser editor
-Piston API	C# code compilation and execution
-Lucide React	Icons
-shadcn/ui	UI components
-📁 Folder Structure
+---
+
+## 📋 پروجیکٹ کا تعارف
+
+یہ ایک **ویب بیسڈ C# کمپائلر** ہے جو پروفیشنل IDE جیسا انٹرفیس فراہم کرتا ہے۔ اس میں:
+
+- ✅ **Monaco Editor** — VS Code جیسا کوڈ ایڈیٹر (syntax highlighting، autocomplete)
+- ✅ **Piston API** — محفوظ (sandboxed) کوڈ کمپائلیشن اور ایگزیکیوشن
+- ✅ **ریئل ٹائم آؤٹ پٹ** — کمپائل ایررز اور رن ٹائم آؤٹ پٹ فوری دکھائی دیتا ہے
+- ✅ **ڈارک تھیم** — پروفیشنل IDE جیسا ڈیزائن
+
+---
+
+## 🛠️ ٹیکنالوجیز (Tech Stack)
+
+| ٹیکنالوجی | استعمال |
+|---|---|
+| **React 18** | فرنٹ اینڈ UI فریم ورک |
+| **TypeScript** | ٹائپ سیفٹی اور بہتر ڈویلپمنٹ |
+| **Vite** | فاسٹ بلڈ ٹول اور ڈیو سرور |
+| **Tailwind CSS** | یوٹیلیٹی فرسٹ CSS فریم ورک |
+| **Monaco Editor** | VS Code کا براؤزر ایڈیٹر |
+| **Piston API** | C# کوڈ کمپائلیشن اور ایگزیکیوشن |
+| **Lucide React** | آئیکنز |
+| **shadcn/ui** | UI کمپوننٹس |
+
+---
+
+## 📁 کوڈ اسٹرکچر (Folder Structure)
+
+```
 src/
 ├── components/
-│   ├── CodeEditor.tsx        # Monaco Editor component — code editing area
-│   ├── OutputPanel.tsx       # Output panel — shows compile/run results
-│   ├── NavLink.tsx           # Navigation link component
-│   └── ui/                   # shadcn/ui components (button, card, dialog, etc.)
+│   ├── CodeEditor.tsx        # Monaco Editor کمپوننٹ — کوڈ لکھنے کا ایریا
+│   ├── OutputPanel.tsx       # آؤٹ پٹ پینل — کمپائل/رن کا نتیجہ دکھاتا ہے
+│   ├── NavLink.tsx           # نیویگیشن لنک کمپوننٹ
+│   └── ui/                   # shadcn/ui کمپوننٹس (button, card, dialog وغیرہ)
 ├── lib/
-│   ├── compiler.ts           # Piston API integration — send code & receive result
-│   └── utils.ts              # Utility functions
+│   ├── compiler.ts           # Piston API انٹیگریشن — کوڈ بھیجنا اور نتیجہ وصول کرنا
+│   └── utils.ts              # یوٹیلیٹی فنکشنز
 ├── pages/
-│   ├── Index.tsx             # Main page — editor + output + toolbar
-│   └── NotFound.tsx          # 404 page
-├── hooks/                    # Custom React hooks
-├── test/                     # Test setup and test files
-├── index.css                 # Global styles and design tokens
-├── App.tsx                   # App router
-└── main.tsx                  # Entry point
+│   ├── Index.tsx             # مین پیج — ایڈیٹر + آؤٹ پٹ + ٹول بار
+│   └── NotFound.tsx          # 404 پیج
+├── hooks/                    # کسٹم React ہکس
+├── test/                     # ٹیسٹ سیٹ اپ اور ٹیسٹ فائلز
+├── index.css                 # گلوبل سٹائلز اور ڈیزائن ٹوکنز
+├── App.tsx                   # ایپ روٹر
+└── main.tsx                  # انٹری پوائنٹ
+```
 
-⚙️ How It Works
-User writes code (Monaco Editor)
+---
+
+## ⚙️ کیسے کام کرتا ہے؟
+
+```
+صارف کوڈ لکھتا ہے (Monaco Editor)
         ↓
-Presses "Run" button
+"Run" بٹن دباتا ہے
         ↓
-Code is sent to Piston API (POST request)
+کوڈ Piston API کو بھیجا جاتا ہے (POST request)
         ↓
-API compiles and executes C# code on server (sandboxed)
+API سرور پر C# کوڈ کمپائل اور ایگزیکیوٹ ہوتا ہے (sandboxed)
         ↓
-Result (output or error) is returned
+نتیجہ (output یا error) واپس آتا ہے
         ↓
-Displayed in the output panel
+آؤٹ پٹ پینل میں دکھایا جاتا ہے
+```
 
-🔒 Security
+---
 
-Code runs via Piston API, fully sandboxed
+## 🔒 سیکیورٹی
 
-User code is not stored on the server
+- کوڈ **Piston API** کے ذریعے چلتا ہے جو مکمل طور پر **sandboxed** ہے
+- صارف کا کوڈ سرور پر محفوظ نہیں ہوتا
+- ہر ایگزیکیوشن الگ کنٹینر میں ہوتی ہے
+- ٹائم لمیٹ اور میموری لمیٹ لاگو ہے
 
-Each execution runs in a separate container
+---
 
-Time and memory limits are applied
+## 🚀 لوکل ڈویلپمنٹ
 
-🚀 Local Development
-# Clone the repo
+```sh
+# ریپو کلون کریں
 git clone <YOUR_GIT_URL>
 
-# Navigate into the folder
+# فولڈر میں جائیں
 cd <YOUR_PROJECT_NAME>
 
-# Install dependencies
+# ڈیپنڈنسیز انسٹال کریں
 npm install
 
-# Run dev server
+# ڈیو سرور چلائیں
 npm run dev
+```
 
+ایپ `http://localhost:8080` پر چلے گی۔
 
-App will run at http://localhost:8080.
+---
 
-📌 Features
-Feature	Description
-🖊️ Code Editor	Monaco Editor — syntax highlighting, autocomplete
-▶️ Compile & Run	Run C# code with a single click
-📊 Output Panel	Shows success/error status, execution time
-🔄 Reset	Reset code to default
-🌙 Dark Theme	Easy on the eyes
-🔮 Future Scope
+## 📌 فیچرز
 
- Multi-language support (Python, Java, JavaScript)
+| فیچر | تفصیل |
+|---|---|
+| 🖊️ کوڈ ایڈیٹر | Monaco Editor — syntax highlighting, autocomplete |
+| ▶️ کمپائل اور رن | ایک کلک میں C# کوڈ چلائیں |
+| 📊 آؤٹ پٹ پینل | success/error سٹیٹس، ایگزیکیوشن ٹائم |
+| 🔄 ری سیٹ | کوڈ ڈیفالٹ پر واپس لائیں |
+| 🌙 ڈارک تھیم | آنکھوں کے لیے آرام دہ |
 
- AI-based code suggestions and auto-fix
+---
 
- File explorer (multi-file support)
+## 🔮 مستقبل کے منصوبے (Scope)
 
- Code sharing (share via link)
+- [ ] متعدد زبانوں کی سپورٹ (Python, Java, JavaScript)
+- [ ] AI سے کوڈ تجاویز اور آٹو فکس
+- [ ] فائل ایکسپلورر (ملٹی فائل سپورٹ)
+- [ ] کوڈ شیئرنگ (لنک سے شیئر کریں)
+- [ ] صارف اکاؤنٹس اور کوڈ محفوظ کرنا
+- [ ] کسٹم تھیمز
+- [ ] موبائل ریسپانسو ڈیزائن میں بہتری
 
- User accounts and saving code
+---
 
- Custom themes
+## 📄 لائسنس
 
- Improved mobile responsive design
+یہ پروجیکٹ اوپن سورس ہے۔
 
-📄 License
+---
 
-This project is open-source.
-
-Made with ❤️
+**بنایا گیا ❤️ کے ساتھ**
