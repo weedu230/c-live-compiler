@@ -90,7 +90,7 @@ const Index = () => {
       <footer className="flex items-center justify-between border-t border-border bg-status-bar px-4 py-1">
         <span className="font-mono text-[11px] text-muted-foreground">C#</span>
         <span className="font-mono text-[11px] text-muted-foreground">
-          Powered by Piston API
+          UTF-8
         </span>
       </footer>
     </div>
