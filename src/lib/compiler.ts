@@ -6,6 +6,14 @@ export interface CompileResult {
   executionTime: number;
 }
 
+function stripCompilerHeader(text: string): string {
+  return text
+    .replace(/Microsoft \(R\) Visual C# Compiler version .+\r?\n/g, "")
+    .replace(/Copyright \(C\) Microsoft Corporation\. All rights reserved\.\r?\n?/g, "")
+    .replace(/^\s*\n/, "")
+    .trim();
+}
+
 export async function compileCSharp(code: string): Promise<CompileResult> {
   const start = performance.now();
 
@@ -29,14 +37,14 @@ export async function compileCSharp(code: string): Promise<CompileResult> {
 
     const compileError = data.compile?.stderr || data.compile?.output;
     if (data.compile?.code !== 0 && compileError) {
-      return { output: compileError, isError: true, executionTime: elapsed };
+      return { output: stripCompilerHeader(compileError), isError: true, executionTime: elapsed };
     }
 
     const runOutput = (data.run?.stdout || "") + (data.run?.stderr || "");
     const hasError = data.run?.code !== 0 && !!data.run?.stderr;
 
     return {
-      output: runOutput || "(No output)",
+      output: stripCompilerHeader(runOutput) || "(No output)",
       isError: hasError,
       executionTime: elapsed,
     };
