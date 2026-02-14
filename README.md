@@ -1,73 +1,139 @@
-# Welcome to your Lovable project
+# 🟣 C# Online Compiler
 
-## Project info
+ایک مکمل ویب بیسڈ C# کمپائلر جو براؤزر میں ہی C# کوڈ لکھنے، کمپائل کرنے اور چلانے کی سہولت دیتا ہے۔
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+![C# Compiler](https://img.shields.io/badge/C%23-Online_Compiler-purple?style=for-the-badge&logo=csharp)
+![React](https://img.shields.io/badge/React-18-blue?style=for-the-badge&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
+![Tailwind](https://img.shields.io/badge/Tailwind_CSS-3-38bdf8?style=for-the-badge&logo=tailwindcss)
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## 📋 پروجیکٹ کا تعارف
 
-**Use Lovable**
+یہ ایک **ویب بیسڈ C# کمپائلر** ہے جو پروفیشنل IDE جیسا انٹرفیس فراہم کرتا ہے۔ اس میں:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+- ✅ **Monaco Editor** — VS Code جیسا کوڈ ایڈیٹر (syntax highlighting، autocomplete)
+- ✅ **Piston API** — محفوظ (sandboxed) کوڈ کمپائلیشن اور ایگزیکیوشن
+- ✅ **ریئل ٹائم آؤٹ پٹ** — کمپائل ایررز اور رن ٹائم آؤٹ پٹ فوری دکھائی دیتا ہے
+- ✅ **ڈارک تھیم** — پروفیشنل IDE جیسا ڈیزائن
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## 🛠️ ٹیکنالوجیز (Tech Stack)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+| ٹیکنالوجی | استعمال |
+|---|---|
+| **React 18** | فرنٹ اینڈ UI فریم ورک |
+| **TypeScript** | ٹائپ سیفٹی اور بہتر ڈویلپمنٹ |
+| **Vite** | فاسٹ بلڈ ٹول اور ڈیو سرور |
+| **Tailwind CSS** | یوٹیلیٹی فرسٹ CSS فریم ورک |
+| **Monaco Editor** | VS Code کا براؤزر ایڈیٹر |
+| **Piston API** | C# کوڈ کمپائلیشن اور ایگزیکیوشن |
+| **Lucide React** | آئیکنز |
+| **shadcn/ui** | UI کمپوننٹس |
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## 📁 کوڈ اسٹرکچر (Folder Structure)
+
+```
+src/
+├── components/
+│   ├── CodeEditor.tsx        # Monaco Editor کمپوننٹ — کوڈ لکھنے کا ایریا
+│   ├── OutputPanel.tsx       # آؤٹ پٹ پینل — کمپائل/رن کا نتیجہ دکھاتا ہے
+│   ├── NavLink.tsx           # نیویگیشن لنک کمپوننٹ
+│   └── ui/                   # shadcn/ui کمپوننٹس (button, card, dialog وغیرہ)
+├── lib/
+│   ├── compiler.ts           # Piston API انٹیگریشن — کوڈ بھیجنا اور نتیجہ وصول کرنا
+│   └── utils.ts              # یوٹیلیٹی فنکشنز
+├── pages/
+│   ├── Index.tsx             # مین پیج — ایڈیٹر + آؤٹ پٹ + ٹول بار
+│   └── NotFound.tsx          # 404 پیج
+├── hooks/                    # کسٹم React ہکس
+├── test/                     # ٹیسٹ سیٹ اپ اور ٹیسٹ فائلز
+├── index.css                 # گلوبل سٹائلز اور ڈیزائن ٹوکنز
+├── App.tsx                   # ایپ روٹر
+└── main.tsx                  # انٹری پوائنٹ
+```
+
+---
+
+## ⚙️ کیسے کام کرتا ہے؟
+
+```
+صارف کوڈ لکھتا ہے (Monaco Editor)
+        ↓
+"Run" بٹن دباتا ہے
+        ↓
+کوڈ Piston API کو بھیجا جاتا ہے (POST request)
+        ↓
+API سرور پر C# کوڈ کمپائل اور ایگزیکیوٹ ہوتا ہے (sandboxed)
+        ↓
+نتیجہ (output یا error) واپس آتا ہے
+        ↓
+آؤٹ پٹ پینل میں دکھایا جاتا ہے
+```
+
+---
+
+## 🔒 سیکیورٹی
+
+- کوڈ **Piston API** کے ذریعے چلتا ہے جو مکمل طور پر **sandboxed** ہے
+- صارف کا کوڈ سرور پر محفوظ نہیں ہوتا
+- ہر ایگزیکیوشن الگ کنٹینر میں ہوتی ہے
+- ٹائم لمیٹ اور میموری لمیٹ لاگو ہے
+
+---
+
+## 🚀 لوکل ڈویلپمنٹ
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
+# ریپو کلون کریں
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
+# فولڈر میں جائیں
 cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install the necessary dependencies.
-npm i
+# ڈیپنڈنسیز انسٹال کریں
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# ڈیو سرور چلائیں
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+ایپ `http://localhost:8080` پر چلے گی۔
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+---
 
-**Use GitHub Codespaces**
+## 📌 فیچرز
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+| فیچر | تفصیل |
+|---|---|
+| 🖊️ کوڈ ایڈیٹر | Monaco Editor — syntax highlighting, autocomplete |
+| ▶️ کمپائل اور رن | ایک کلک میں C# کوڈ چلائیں |
+| 📊 آؤٹ پٹ پینل | success/error سٹیٹس، ایگزیکیوشن ٹائم |
+| 🔄 ری سیٹ | کوڈ ڈیفالٹ پر واپس لائیں |
+| 🌙 ڈارک تھیم | آنکھوں کے لیے آرام دہ |
 
-## What technologies are used for this project?
+---
 
-This project is built with:
+## 🔮 مستقبل کے منصوبے (Scope)
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- [ ] متعدد زبانوں کی سپورٹ (Python, Java, JavaScript)
+- [ ] AI سے کوڈ تجاویز اور آٹو فکس
+- [ ] فائل ایکسپلورر (ملٹی فائل سپورٹ)
+- [ ] کوڈ شیئرنگ (لنک سے شیئر کریں)
+- [ ] صارف اکاؤنٹس اور کوڈ محفوظ کرنا
+- [ ] کسٹم تھیمز
+- [ ] موبائل ریسپانسو ڈیزائن میں بہتری
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## 📄 لائسنس
 
-## Can I connect a custom domain to my Lovable project?
+یہ پروجیکٹ اوپن سورس ہے۔
 
-Yes, you can!
+---
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+**بنایا گیا ❤️ کے ساتھ**
