@@ -115,8 +115,9 @@ class Program
         Console.WriteLine("Hello, World!");
         
         // Try modifying this code!
-        for (int i = 1; i <= 5; i++) {
-            Console.WriteLine(`Count: ${i}`);
+        for (int i = 1; i <= 5; i++)
+        {
+            Console.WriteLine($"Count: {i}");
         }
     }
-};
+}`;
