@@ -1,7 +1,9 @@
 // Alternative Piston API endpoints for better reliability
+// Using multiple endpoints with fallback support
 const PISTON_ENDPOINTS = [
   "https://emkc.org/api/v2/piston/execute",
-  "https://piston-api.mrafr4sve1.repl.co/api/v2/piston/execute",
+  "https://piston.rmca.dev/api/v2/execute",
+  "https://api.piston-code.org/api/v2/execute",
 ];
 
 export interface CompileResult {
@@ -36,6 +38,10 @@ export async function compileCSharp(code: string): Promise<CompileResult> {
     const endpoint = PISTON_ENDPOINTS[i];
     
     try {
+      // Create an AbortController for timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+      
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { 
@@ -47,7 +53,10 @@ export async function compileCSharp(code: string): Promise<CompileResult> {
           version: "*",
           files: [{ name: "Main.cs", content: code }],
         }),
+        signal: controller.signal,
       });
+      
+      clearTimeout(timeoutId);
 
       // If we get 401, try next endpoint
       if (response.status === 401) {
@@ -85,11 +94,23 @@ export async function compileCSharp(code: string): Promise<CompileResult> {
     } catch (err) {
       console.error(`Error with endpoint ${endpoint}:`, err);
       
-      // If this is the last endpoint, return error
+      // If this is the last endpoint, return detailed error
       if (i === PISTON_ENDPOINTS.length - 1) {
         const elapsed = Math.round(performance.now() - start);
+        let errorMessage = "Unknown error";
+        
+        if (err instanceof Error) {
+          if (err.name === 'AbortError') {
+            errorMessage = "Request timeout - The compiler service took too long to respond";
+          } else if (err.message.includes('fetch')) {
+            errorMessage = "Network error - Failed to reach the compiler service";
+          } else {
+            errorMessage = err.message;
+          }
+        }
+        
         return {
-          output: `Failed to compile: ${err instanceof Error ? err.message : "Unknown error"}\n\nPlease try again in a moment. If the issue persists, the compiler service may be temporarily unavailable.`,
+          output: `Failed to compile: ${errorMessage}\n\nPlease try again in a moment. If the issue persists, the compiler service may be temporarily unavailable.\n\nTroubleshooting:\n- Check your internet connection\n- Try refreshing the page\n- The service may be experiencing high traffic`,
           isError: true,
           executionTime: elapsed,
         };
