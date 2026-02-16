@@ -86,6 +86,32 @@ Displayed in output panel
 
 ---
 
+## 🌐 Piston API Configuration
+
+This compiler uses the **Piston API** for code execution. The app automatically tries multiple endpoints for reliability:
+
+1. `https://emkc.org/api/v2/piston/execute` (Primary)
+2. `https://piston.rmca.dev/api/v2/execute` (Fallback 1)
+3. `https://api.piston-code.org/api/v2/execute` (Fallback 2)
+
+### Troubleshooting "Failed to fetch" Errors
+
+If you encounter compilation errors:
+
+- **Check your internet connection** — The compiler requires internet access to reach Piston API
+- **Try refreshing the page** — Sometimes a simple refresh resolves temporary issues
+- **Check if Piston API is available** — Visit [emkc.org](https://emkc.org) to check status
+- **Wait and retry** — The service may be experiencing high traffic
+- **CORS issues** — If deploying, ensure your hosting platform allows external API calls
+
+### Request Configuration
+
+- **Timeout**: 30 seconds per request
+- **Retry Logic**: Automatically tries all available endpoints
+- **Error Handling**: Provides detailed error messages with troubleshooting tips
+
+---
+
 ## 🚀 Local Development
 
 ```sh
