@@ -10,8 +10,9 @@ const REQUEST_TIMEOUT = 10000;
 // Maximum retry attempts per endpoint
 const MAX_RETRIES = 2;
 
-// Retry delay in milliseconds
-const RETRY_DELAY = 1000;
+// Base delay for exponential backoff (in milliseconds)
+// Actual delay = BASE_RETRY_DELAY * (retry + 1)
+const BASE_RETRY_DELAY = 1000;
 
 export interface CompileResult {
   output: string;
@@ -56,6 +57,28 @@ async function fetchWithTimeout(
  */
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * Categorizes error messages to determine the type of failure
+ * @param errors - Array of error messages
+ * @returns true if errors indicate network/connectivity issues
+ */
+function isNetworkError(errors: string[]): boolean {
+  const networkErrorPatterns = [
+    "Failed to fetch",
+    "timeout",
+    "Network request failed",
+    "ERR_BLOCKED_BY_CLIENT",
+    "ERR_CONNECTION",
+    "ERR_INTERNET_DISCONNECTED",
+  ];
+  
+  return errors.some(error => 
+    networkErrorPatterns.some(pattern => 
+      error.toLowerCase().includes(pattern.toLowerCase())
+    )
+  );
 }
 
 /**
@@ -118,7 +141,7 @@ export async function compileCSharp(code: string): Promise<CompileResult> {
           
           // Retry on server errors (5xx)
           if (response.status >= 500 && retry < MAX_RETRIES - 1) {
-            await sleep(RETRY_DELAY * (retry + 1));
+            await sleep(BASE_RETRY_DELAY * (retry + 1));
             continue;
           }
           break; // Move to next endpoint for client errors
@@ -153,7 +176,7 @@ export async function compileCSharp(code: string): Promise<CompileResult> {
         
         // Retry with exponential backoff
         if (retry < MAX_RETRIES - 1) {
-          await sleep(RETRY_DELAY * (retry + 1));
+          await sleep(BASE_RETRY_DELAY * (retry + 1));
         }
       }
     }
@@ -165,8 +188,8 @@ export async function compileCSharp(code: string): Promise<CompileResult> {
   // Create a detailed error message
   let errorMessage = "Failed to compile: Unable to connect to the compiler service.\n\n";
   
-  // Check if it's a network/CORS issue
-  if (errors.some(e => e.includes("Failed to fetch") || e.includes("timeout"))) {
+  // Check if it's a network/CORS issue using the helper function
+  if (isNetworkError(errors)) {
     errorMessage += "⚠️ Connection Error: The compiler service could not be reached.\n\n";
     errorMessage += "Possible causes:\n";
     errorMessage += "• Network connectivity issues\n";
