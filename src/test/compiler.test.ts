@@ -17,7 +17,7 @@ describe("compileCSharp", () => {
       Promise.reject(new Error("Failed to fetch"))
     ) as any;
 
-    const promise = compileCSharp("Console.WriteLine('test');");
+    const promise = compileCSharp('Console.WriteLine("test");');
     vi.runAllTimers();
     const result = await promise;
 
@@ -35,7 +35,7 @@ describe("compileCSharp", () => {
       return Promise.reject(error);
     }) as any;
 
-    const result = await compileCSharp("Console.WriteLine('test');");
+    const result = await compileCSharp('Console.WriteLine("test");');
 
     expect(result.isError).toBe(true);
     expect(result.output).toContain("Request timeout");
@@ -86,7 +86,7 @@ describe("compileCSharp", () => {
       })
     ) as any;
 
-    const result = await compileCSharp("Console.WriteLine('test')"); // missing semicolon
+    const result = await compileCSharp('Console.WriteLine("test")'); // missing semicolon
 
     expect(result.isError).toBe(true);
     expect(result.output).toContain("error");
@@ -128,7 +128,7 @@ describe("compileCSharp", () => {
       return Promise.reject(new Error("Failed to fetch"));
     }) as any;
 
-    const promise = compileCSharp("Console.WriteLine('test');");
+    const promise = compileCSharp('Console.WriteLine("test");');
     vi.runAllTimers();
     await promise;
 
@@ -145,7 +145,7 @@ describe("compileCSharp", () => {
       })
     ) as any;
 
-    const promise = compileCSharp("Console.WriteLine('test');");
+    const promise = compileCSharp('Console.WriteLine("test");');
     vi.runAllTimers();
     const result = await promise;
 
