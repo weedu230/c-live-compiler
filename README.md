@@ -1,10 +1,6 @@
-
-
-
-
 # 🟣 C# Online Compiler
 
-ایک مکمل ویب بیسڈ C# کمپائلر جو براؤزر میں ہی C# کوڈ لکھنے، کمپائل کرنے اور چلانے کی سہولت دیتا ہے۔
+A complete web-based C# compiler that allows you to write, compile, and run C# code directly in your browser.
 
 ![C# Compiler](https://img.shields.io/badge/C%23-Online_Compiler-purple?style=for-the-badge&logo=csharp)
 ![React](https://img.shields.io/badge/React-18-blue?style=for-the-badge&logo=react)
@@ -13,131 +9,148 @@
 
 ---
 
-## 📋 پروجیکٹ کا تعارف
+## 📋 Project Overview
 
-یہ ایک **ویب بیسڈ C# کمپائلر** ہے جو پروفیشنل IDE جیسا انٹرفیس فراہم کرتا ہے۔ اس میں:
+This is a **web-based C# compiler** that provides a professional IDE-like interface with:
 
-- ✅ **Monaco Editor** — VS Code جیسا کوڈ ایڈیٹر (syntax highlighting، autocomplete)
-- ✅ **Piston API** — محفوظ (sandboxed) کوڈ کمپائلیشن اور ایگزیکیوشن
-- ✅ **ریئل ٹائم آؤٹ پٹ** — کمپائل ایررز اور رن ٹائم آؤٹ پٹ فوری دکھائی دیتا ہے
-- ✅ **ڈارک تھیم** — پروفیشنل IDE جیسا ڈیزائن
+- ✅ **Monaco Editor** — VS Code-like code editor (syntax highlighting, autocomplete)
+- ✅ **Piston API** — Secure sandboxed code compilation and execution
+- ✅ **Real-time Output** — Instant display of compile errors and runtime output
+- ✅ **Dark Theme** — Professional IDE-style design
 
 ---
 
-## 🛠️ ٹیکنالوجیز (Tech Stack)
+## 🛠️ Tech Stack
 
-| ٹیکنالوجی | استعمال |
+| Technology | Usage |
 |---|---|
-| **React 18** | فرنٹ اینڈ UI فریم ورک |
-| **TypeScript** | ٹائپ سیفٹی اور بہتر ڈویلپمنٹ |
-| **Vite** | فاسٹ بلڈ ٹول اور ڈیو سرور |
-| **Tailwind CSS** | یوٹیلیٹی فرسٹ CSS فریم ورک |
-| **Monaco Editor** | VS Code کا براؤزر ایڈیٹر |
-| **Piston API** | C# کوڈ کمپائلیشن اور ایگزیکیوشن |
-| **Lucide React** | آئیکنز |
-| **shadcn/ui** | UI کمپوننٹس |
+| **React 18** | Frontend UI framework |
+| **TypeScript** | Type safety and better development experience |
+| **Vite** | Fast build tool and dev server |
+| **Tailwind CSS** | Utility-first CSS framework |
+| **Monaco Editor** | VS Code's browser-based editor |
+| **Piston API** | C# code compilation and execution |
+| **Lucide React** | Icons |
+| **shadcn/ui** | UI components |
 
 ---
 
-## 📁 کوڈ اسٹرکچر (Folder Structure)
+## 📁 Project Structure
 
 ```
 src/
 ├── components/
-│   ├── CodeEditor.tsx        # Monaco Editor کمپوننٹ — کوڈ لکھنے کا ایریا
-│   ├── OutputPanel.tsx       # آؤٹ پٹ پینل — کمپائل/رن کا نتیجہ دکھاتا ہے
-│   ├── NavLink.tsx           # نیویگیشن لنک کمپوننٹ
-│   └── ui/                   # shadcn/ui کمپوننٹس (button, card, dialog وغیرہ)
+│   ├── CodeEditor.tsx        # Monaco Editor component — Code editing area
+│   ├── OutputPanel.tsx       # Output panel — Displays compile/run results
+│   ├── NavLink.tsx           # Navigation link component
+│   └── ui/                   # shadcn/ui components (button, card, dialog, etc.)
 ├── lib/
-│   ├── compiler.ts           # Piston API انٹیگریشن — کوڈ بھیجنا اور نتیجہ وصول کرنا
-│   └── utils.ts              # یوٹیلیٹی فنکشنز
+│   ├── compiler.ts           # Piston API integration — Send code and receive results
+│   └── utils.ts              # Utility functions
 ├── pages/
-│   ├── Index.tsx             # مین پیج — ایڈیٹر + آؤٹ پٹ + ٹول بار
-│   └── NotFound.tsx          # 404 پیج
-├── hooks/                    # کسٹم React ہکس
-├── test/                     # ٹیسٹ سیٹ اپ اور ٹیسٹ فائلز
-├── index.css                 # گلوبل سٹائلز اور ڈیزائن ٹوکنز
-├── App.tsx                   # ایپ روٹر
-└── main.tsx                  # انٹری پوائنٹ
+│   ├── Index.tsx             # Main page — Editor + Output + Toolbar
+│   └── NotFound.tsx          # 404 page
+├── hooks/                    # Custom React hooks
+├── test/                     # Test setup and test files
+├── index.css                 # Global styles and design tokens
+├── App.tsx                   # App router
+└── main.tsx                  # Entry point
 ```
 
 ---
 
-## ⚙️ کیسے کام کرتا ہے؟
+## ⚙️ How It Works
 
 ```
-صارف کوڈ لکھتا ہے (Monaco Editor)
+User writes code (Monaco Editor)
         ↓
-"Run" بٹن دباتا ہے
+Clicks "Run" button
         ↓
-کوڈ Piston API کو بھیجا جاتا ہے (POST request)
+Code is sent to Piston API (POST request)
         ↓
-API سرور پر C# کوڈ کمپائل اور ایگزیکیوٹ ہوتا ہے (sandboxed)
+API compiles and executes C# code on server (sandboxed)
         ↓
-نتیجہ (output یا error) واپس آتا ہے
+Result (output or error) is returned
         ↓
-آؤٹ پٹ پینل میں دکھایا جاتا ہے
+Displayed in output panel
 ```
 
 ---
 
-## 🔒 سیکیورٹی
+## 🔒 Security
 
-- کوڈ **Piston API** کے ذریعے چلتا ہے جو مکمل طور پر **sandboxed** ہے
-- صارف کا کوڈ سرور پر محفوظ نہیں ہوتا
-- ہر ایگزیکیوشن الگ کنٹینر میں ہوتی ہے
-- ٹائم لمیٹ اور میموری لمیٹ لاگو ہے
+- Code runs through **Piston API**, which is fully **sandboxed**
+- User code is not stored on the server
+- Each execution happens in an isolated container
+- Time limits and memory limits are enforced
 
 ---
 
-## 🚀 لوکل ڈویلپمنٹ
+## 🚀 Local Development
 
 ```sh
-# ریپو کلون کریں
-git clone <YOUR_GIT_URL>
+# Clone the repository
+git clone https://github.com/weedu230/csharp-live-compiler.git
 
-# فولڈر میں جائیں
-cd <YOUR_PROJECT_NAME>
+# Navigate to folder
+cd csharp-live-compiler
 
-# ڈیپنڈنسیز انسٹال کریں
+# Install dependencies
 npm install
 
-# ڈیو سرور چلائیں
+# Run dev server
 npm run dev
 ```
 
-ایپ `http://localhost:8080` پر چلے گی۔
+The app will run at `http://localhost:8080`.
 
 ---
 
-## 📌 فیچرز
+## 📌 Features
 
-| فیچر | تفصیل |
+| Feature | Description |
 |---|---|
-| 🖊️ کوڈ ایڈیٹر | Monaco Editor — syntax highlighting, autocomplete |
-| ▶️ کمپائل اور رن | ایک کلک میں C# کوڈ چلائیں |
-| 📊 آؤٹ پٹ پینل | success/error سٹیٹس، ایگزیکیوشن ٹائم |
-| 🔄 ری سیٹ | کوڈ ڈیفالٹ پر واپس لائیں |
-| 🌙 ڈارک تھیم | آنکھوں کے لیے آرام دہ |
+| 🖊️ Code Editor | Monaco Editor — syntax highlighting, autocomplete |
+| ▶️ Compile &amp; Run | Execute C# code with one click |
+| 📊 Output Panel | success/error status, execution time |
+| 🔄 Reset | Reset code to default |
+| 🌙 Dark Theme | Easy on the eyes |
 
 ---
 
-## 🔮 مستقبل کے منصوبے (Scope)
+## 🔮 Future Enhancements
 
-- [ ] متعدد زبانوں کی سپورٹ (Python, Java, JavaScript)
-- [ ] AI سے کوڈ تجاویز اور آٹو فکس
-- [ ] فائل ایکسپلورر (ملٹی فائل سپورٹ)
-- [ ] کوڈ شیئرنگ (لنک سے شیئر کریں)
-- [ ] صارف اکاؤنٹس اور کوڈ محفوظ کرنا
-- [ ] کسٹم تھیمز
-- [ ] موبائل ریسپانسو ڈیزائن میں بہتری
-
----
-
-## 📄 لائسنس
-
-یہ پروجیکٹ اوپن سورس ہے۔
+- [ ] Support for multiple languages (Python, Java, JavaScript)
+- [ ] AI-powered code suggestions and auto-fix
+- [ ] File explorer (multi-file support)
+- [ ] Code sharing (share via link)
+- [ ] User accounts and code saving
+- [ ] Custom themes
+- [ ] Improved mobile responsive design
 
 ---
 
-**بنایا گیا ❤️ کے ساتھ**
+## 🚀 Deployment
+
+### Deploy to Vercel (Recommended)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/weedu230/csharp-live-compiler)
+
+**Steps:**
+1. Push your code to GitHub
+2. Go to [vercel.com](https://vercel.com)
+3. Click "Import Project"
+4. Select your repository
+5. Click "Deploy"
+
+Vercel will automatically detect this is a Vite project and configure everything!
+
+---
+
+## 📄 License
+
+This project is open source.
+
+---
+
+**Made with ❤️**
