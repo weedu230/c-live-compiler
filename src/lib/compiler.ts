@@ -46,11 +46,24 @@ async function fetchWithTimeout(
   }
 }
 
+interface PistonResponse {
+  compile?: {
+    code: number;
+    stderr?: string;
+    output?: string;
+  };
+  run?: {
+    code: number;
+    stdout?: string;
+    stderr?: string;
+  };
+}
+
 async function tryCompileWithApi(
   apiUrl: string,
   code: string,
   retries: number = 0
-): Promise<any> {
+): Promise<PistonResponse> {
   try {
     const response = await fetchWithTimeout(
       apiUrl,
