@@ -58,8 +58,8 @@ describe("compileCSharp", () => {
       fetchCalls.push(url);
       const callsToThisUrl = fetchCalls.filter(u => u === url).length;
       
-      // First API fails with server error (will retry 2 times = 3 total calls)
-      if (url.includes("emkc.org") && callsToThisUrl <= 3) {
+      // First API fails with server error (will retry 1 time = 2 total calls)
+      if (url.includes("emkc.org") && callsToThisUrl <= 2) {
         return Promise.resolve({
           ok: false,
           status: 500,
@@ -80,21 +80,21 @@ describe("compileCSharp", () => {
 
     expect(result.isError).toBe(false);
     expect(result.output).toContain("Success from backup API");
-    // Verify first API was tried 3 times (initial + 2 retries)
+    // Verify first API was tried 2 times (initial + 1 retry)
     const firstApiCalls = fetchCalls.filter(url => url.includes("emkc.org"));
-    expect(firstApiCalls.length).toBe(3);
+    expect(firstApiCalls.length).toBe(2);
     // Verify fallback to second API occurred
-    expect(fetchCalls.length).toBeGreaterThan(3);
+    expect(fetchCalls.length).toBeGreaterThan(2);
   }, 10000);
 
-  it("should provide network error message", async () => {
+  it("should provide service unavailable error message when all APIs fail", async () => {
     global.fetch = vi.fn().mockRejectedValue(new Error("Failed to fetch"));
 
     const code = 'using System; class Program { static void Main() { Console.WriteLine("Test"); } }';
     const result = await compileCSharp(code);
 
     expect(result.isError).toBe(true);
-    expect(result.output).toContain("Network error");
+    expect(result.output).toContain("Compilation service unavailable");
   }, 15000);
 
   it("should handle authentication errors", async () => {
