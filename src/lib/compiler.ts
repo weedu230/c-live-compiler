@@ -49,6 +49,7 @@ async function fetchWithTimeout(
 interface PistonResponse {
   compile?: {
     code: number;
+    stdout?: string;
     stderr?: string;
     output?: string;
   };
@@ -56,6 +57,7 @@ interface PistonResponse {
     code: number;
     stdout?: string;
     stderr?: string;
+    output?: string;
   };
 }
 
@@ -126,7 +128,7 @@ export async function compileCSharp(code: string): Promise<CompileResult> {
         };
       }
 
-      const runOutput = (data.run?.stdout || "") + (data.run?.stderr || "");
+      const runOutput = ((data.run?.stdout || "") + (data.run?.stderr || "")) || (data.run?.output || "");
       const hasError = data.run?.code !== 0 && !!data.run?.stderr;
 
       return {

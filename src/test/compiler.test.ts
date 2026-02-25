@@ -133,4 +133,22 @@ describe("compileCSharp", () => {
     expect(result.output).not.toContain("Microsoft");
     expect(result.output).not.toContain("Copyright");
   });
+
+  it("should use run.output as fallback when run.stdout is missing", async () => {
+    const mockResponse = {
+      compile: { code: 0, stderr: "", output: "" },
+      run: { code: 0, output: "Hello from output field!\n" },
+    };
+
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => mockResponse,
+    });
+
+    const code = 'using System; class Program { static void Main() { Console.WriteLine("Hello from output field!"); } }';
+    const result = await compileCSharp(code);
+
+    expect(result.isError).toBe(false);
+    expect(result.output).toContain("Hello from output field!");
+  });
 });
