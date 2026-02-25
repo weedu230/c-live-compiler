@@ -16,12 +16,17 @@ const Index = () => {
     setOutput("");
     setIsError(false);
 
-    const result: CompileResult = await compileCSharp(code);
-
-    setOutput(result.output);
-    setIsError(result.isError);
-    setExecutionTime(result.executionTime);
-    setIsRunning(false);
+    try {
+      const result: CompileResult = await compileCSharp(code);
+      setOutput(result.output);
+      setIsError(result.isError);
+      setExecutionTime(result.executionTime);
+    } catch {
+      setOutput("Unexpected error occurred. Please try again.");
+      setIsError(true);
+    } finally {
+      setIsRunning(false);
+    }
   }, [code]);
 
   const handleReset = () => {
