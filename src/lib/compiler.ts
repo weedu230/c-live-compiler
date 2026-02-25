@@ -5,8 +5,8 @@ const PISTON_APIS = [
   "https://piston-api.vercel.app/api/v2/execute",
 ];
 
-const TIMEOUT_MS = 30000; // 30 second timeout
-const MAX_RETRIES = 2; // Retry failed requests up to 2 times
+const TIMEOUT_MS = 10000; // 10 second timeout per request
+const MAX_RETRIES = 1; // Retry failed requests up to 1 time
 
 export interface CompileResult {
   output: string;
@@ -145,11 +145,11 @@ export async function compileCSharp(code: string): Promise<CompileResult> {
   const elapsed = Math.round(performance.now() - start);
   const errorMessage = lastError
     ? lastError.message.includes("timeout")
-      ? "Request timeout - all API servers are taking too long to respond"
+      ? "Request timeout - compilation servers are taking too long to respond. Please try again."
       : lastError.message.includes("Authentication")
       ? "Authentication failed - unable to access compilation API"
       : lastError.message.includes("Failed to fetch") || lastError.message.includes("NetworkError")
-      ? "Network error - please check your internet connection"
+      ? "Compilation service unavailable - all API endpoints failed. Please try again in a moment."
       : `Failed to compile: ${lastError.message}`
     : "Failed to compile: All API endpoints are unavailable";
 
