@@ -5,7 +5,7 @@ const PISTON_APIS = [
   "https://piston-api.vercel.app/api/v2/execute",
 ];
 
-const TIMEOUT_MS = 10000; // 10 second timeout per request
+const TIMEOUT_MS = 30000; // 30 second timeout per request (C# compilation can take 15-25s)
 const MAX_RETRIES = 1; // Retry failed requests up to 1 time
 
 export interface CompileResult {
