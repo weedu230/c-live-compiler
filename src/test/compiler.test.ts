@@ -97,6 +97,19 @@ describe("compileCSharp", () => {
     expect(result.output).toContain("Compilation service unavailable");
   }, 15000);
 
+  it("should return timeout error message when request times out", async () => {
+    const abortError = Object.assign(new Error("The operation was aborted"), { name: "AbortError" });
+    global.fetch = vi.fn().mockRejectedValue(abortError);
+
+    const code = 'using System; class Program { static void Main() { Console.WriteLine("Test"); } }';
+    const result = await compileCSharp(code);
+
+    expect(result.isError).toBe(true);
+    expect(result.output).toContain("Request timeout");
+    // Timeout errors are not retried, so fetch should be called once per API endpoint (3 total)
+    expect(vi.mocked(global.fetch).mock.calls.length).toBe(3);
+  });
+
   it("should handle authentication errors", async () => {
     global.fetch = vi.fn().mockResolvedValue({
       ok: false,
