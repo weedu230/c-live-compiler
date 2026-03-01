@@ -5,7 +5,8 @@ const PISTON_APIS = [
   "https://piston-api.vercel.app/api/v2/execute",
 ];
 
-const TIMEOUT_MS = 10000; // 10 second timeout per request
+const TIMEOUT_MS = 30000; // 30 second timeout per request (C# compilation can take 15-25s)
+const OVERALL_TIMEOUT_MS = 60000; // 60 second overall deadline across all endpoint attempts
 const MAX_RETRIES = 1; // Retry failed requests up to 1 time
 
 export interface CompileResult {
@@ -25,24 +26,29 @@ function stripCompilerHeader(text: string): string {
 async function fetchWithTimeout(
   url: string,
   options: RequestInit,
-  timeout: number
+  timeout: number,
+  externalSignal?: AbortSignal
 ): Promise<Response> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+  const onExternalAbort = () => controller.abort();
+  externalSignal?.addEventListener("abort", onExternalAbort);
 
   try {
     const response = await fetch(url, {
       ...options,
       signal: controller.signal,
     });
-    clearTimeout(timeoutId);
     return response;
   } catch (error) {
-    clearTimeout(timeoutId);
     if (error instanceof Error && error.name === "AbortError") {
       throw new Error("Request timeout - server took too long to respond");
     }
     throw error;
+  } finally {
+    clearTimeout(timeoutId);
+    externalSignal?.removeEventListener("abort", onExternalAbort);
   }
 }
 
@@ -64,7 +70,8 @@ interface PistonResponse {
 async function tryCompileWithApi(
   apiUrl: string,
   code: string,
-  retries: number = 0
+  retries: number = 0,
+  externalSignal?: AbortSignal
 ): Promise<PistonResponse> {
   try {
     const response = await fetchWithTimeout(
@@ -78,7 +85,8 @@ async function tryCompileWithApi(
           files: [{ name: "Main.cs", content: code }],
         }),
       },
-      TIMEOUT_MS
+      TIMEOUT_MS,
+      externalSignal
     );
 
     if (!response.ok) {
@@ -88,7 +96,7 @@ async function tryCompileWithApi(
       if (response.status >= 500 && retries < MAX_RETRIES) {
         // Retry on server errors
         await new Promise((resolve) => setTimeout(resolve, 1000 * (retries + 1)));
-        return tryCompileWithApi(apiUrl, code, retries + 1);
+        return tryCompileWithApi(apiUrl, code, retries + 1, externalSignal);
       }
       throw new Error(`API returned ${response.status}`);
     }
@@ -102,7 +110,7 @@ async function tryCompileWithApi(
         !error.message.includes("Authentication")
       ) {
         await new Promise((resolve) => setTimeout(resolve, 1000 * (retries + 1)));
-        return tryCompileWithApi(apiUrl, code, retries + 1);
+        return tryCompileWithApi(apiUrl, code, retries + 1, externalSignal);
       }
     }
     throw error;
@@ -113,34 +121,51 @@ export async function compileCSharp(code: string): Promise<CompileResult> {
   const start = performance.now();
   let lastError: Error | null = null;
 
-  // Try each API endpoint with fallback
-  for (let i = 0; i < PISTON_APIS.length; i++) {
-    try {
-      const data = await tryCompileWithApi(PISTON_APIS[i], code);
-      const elapsed = Math.round(performance.now() - start);
+  const overallController = new AbortController();
+  const overallTimeoutId = setTimeout(
+    () => overallController.abort(),
+    OVERALL_TIMEOUT_MS
+  );
 
-      const compileError = data.compile?.stderr || data.compile?.output;
-      if (data.compile?.code !== 0 && compileError) {
-        return {
-          output: stripCompilerHeader(compileError),
-          isError: true,
-          executionTime: elapsed,
-        };
+  try {
+    // Try each API endpoint with fallback
+    for (let i = 0; i < PISTON_APIS.length; i++) {
+      if (overallController.signal.aborted) {
+        lastError = new Error("Request timeout - overall deadline exceeded");
+        break;
       }
 
-      const runOutput = ((data.run?.stdout || "") + (data.run?.stderr || "")) || (data.run?.output || "");
-      const hasError = data.run?.code !== 0 && !!data.run?.stderr;
+      try {
+        const data = await tryCompileWithApi(PISTON_APIS[i], code, 0, overallController.signal);
+        const elapsed = Math.round(performance.now() - start);
 
-      return {
-        output: stripCompilerHeader(runOutput) || "(No output)",
-        isError: hasError,
-        executionTime: elapsed,
-      };
-    } catch (err) {
-      lastError = err instanceof Error ? err : new Error("Unknown error");
-      // Continue to next API endpoint on error
-      continue;
+        const compileError = data.compile?.stderr || data.compile?.output;
+        if (data.compile?.code !== 0 && compileError) {
+          return {
+            output: stripCompilerHeader(compileError),
+            isError: true,
+            executionTime: elapsed,
+          };
+        }
+
+        const runOutput = ((data.run?.stdout || "") + (data.run?.stderr || "")) || (data.run?.output || "");
+        const hasError = data.run?.code !== 0 && !!data.run?.stderr;
+
+        return {
+          output: stripCompilerHeader(runOutput) || "(No output)",
+          isError: hasError,
+          executionTime: elapsed,
+        };
+      } catch (err) {
+        lastError = err instanceof Error ? err : new Error("Unknown error");
+        // Break early if the overall deadline has fired
+        if (overallController.signal.aborted) break;
+        // Continue to next API endpoint on error
+        continue;
+      }
     }
+  } finally {
+    clearTimeout(overallTimeoutId);
   }
 
   // All endpoints failed
